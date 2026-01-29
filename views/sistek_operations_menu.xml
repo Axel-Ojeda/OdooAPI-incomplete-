@@ -1,0 +1,112 @@
+<odoo>
+
+  <!-- ========================= -->
+  <!-- Server Action: Sync Catálogo (snapshot o catálogo, según tu implementación actual) -->
+  <!-- ========================= -->
+  <record id="action_sistek_sync_catalog" model="ir.actions.server">
+    <field name="name">Sync Catálogo Sistek</field>
+    <field name="model_id" ref="base.model_res_users"/>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+result = env["sistek.marketplace.client"].sudo().sync_products_basic()
+
+action = {
+  "type": "ir.actions.client",
+  "tag": "display_notification",
+  "params": {
+    "title": "Sistek Catálogo",
+    "message": (
+      f"✅ Catálogo actualizado\n"
+      f"Creados: {result.get('created', 0)}\n"
+      f"Actualizados: {result.get('updated', 0)}\n"
+      f"Total: {result.get('total', 0)}"
+    ),
+    "type": "success",
+    "sticky": False,
+  }
+}
+    ]]></field>
+  </record>
+
+  <!-- ========================= -->
+  <!-- Server Action: Snapshot API Inventory (Fase 1) -->
+  <!-- ========================= -->
+  <record id="action_api_inventory_snapshot" model="ir.actions.server">
+    <field name="name">Ejecutar Snapshot API Inventory</field>
+    <field name="model_id" ref="base.model_res_users"/>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+res = env["api.inventory.snapshot"].sudo().run_snapshot()
+
+action = {
+  "type": "ir.actions.client",
+  "tag": "display_notification",
+  "params": {
+    "title": "API Inventory Snapshot",
+    "message": (
+      "✅ Snapshot ejecutado"
+    ),
+    "type": "success",
+    "sticky": False,
+  }
+}
+    ]]></field>
+  </record>
+
+  <!-- ========================= -->
+  <!-- Server Action: Apply stock to marked products (Fase 2 - Sistek checkbox) -->
+  <!-- ========================= -->
+  <record id="action_apply_sistek_stock" model="ir.actions.server">
+    <field name="name">Aplicar stock Sistek a productos marcados</field>
+    <field name="model_id" ref="base.model_res_users"/>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+result = env["api.inventory.apply.sistek"].sudo().apply()
+
+action = {
+  "type": "ir.actions.client",
+  "tag": "display_notification",
+  "params": {
+    "title": "Aplicar stock Sistek",
+    "message": (
+      f"✅ Proceso OK\n"
+      f"Productos marcados: {result.get('templates', 0)}\n"
+      f"Matched en snapshot: {result.get('matched', 0)}\n"
+      f"Actualizados: {result.get('updated', 0)}\n"
+      f"No encontrados en snapshot: {result.get('missing_in_snapshot', 0)}"
+    ),
+    "type": "success",
+    "sticky": False,
+  }
+}
+    ]]></field>
+  </record>
+
+  <!-- ========================= -->
+  <!-- Menú: Sistek > Operaciones -->
+  <!-- (asume que menu_sistek_root ya existe en views/menu.xml) -->
+  <!-- ========================= -->
+  <menuitem id="menu_sistek_operations"
+            name="Operaciones"
+            parent="menu_sistek_root"
+            sequence="30"/>
+
+  <menuitem id="menu_sistek_sync_catalog"
+            name="Actualizar Catálogo"
+            parent="menu_sistek_operations"
+            action="adaptor_sistek_marketplace.action_sistek_sync_catalog"
+            sequence="10"/>
+
+  <menuitem id="menu_api_inventory_snapshot"
+            name="Ejecutar Snapshot"
+            parent="menu_sistek_operations"
+            action="adaptor_sistek_marketplace.action_api_inventory_snapshot"
+            sequence="20"/>
+
+  <menuitem id="menu_sistek_apply_stock"
+            name="Aplicar stock a productos marcados"
+            parent="menu_sistek_operations"
+            action="adaptor_sistek_marketplace.action_apply_sistek_stock"
+            sequence="30"/>
+
+</odoo>

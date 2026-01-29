@@ -1,0 +1,24 @@
+<odoo>
+  <!-- Root -->
+  <menuitem id="menu_sistek_root" name="Sistek" sequence="10"/>
+
+  <!-- Catalog submenu -->
+  <menuitem id="menu_sistek_catalog"
+            name="Catálogo"
+            parent="menu_sistek_root"
+            sequence="10"/>
+
+  <!-- Products -->
+  <menuitem id="menu_sistek_products"
+            name="Productos"
+            parent="menu_sistek_catalog"
+            action="action_sistek_products"
+            sequence="10"/>
+
+  <!-- Mappings -->
+  <menuitem id="menu_sistek_mappings"
+            name="Vinculaciones"
+            parent="menu_sistek_catalog"
+            action="action_sistek_stock_map"
+            sequence="20"/>
+</odoo>
