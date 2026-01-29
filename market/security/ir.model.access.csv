@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sistek_product_user,sistek.product user,model_sistek_product,base.group_user,1,0,0,0
-access_sistek_product_manager,sistek.product manager,model_sistek_product,base.group_system,1,1,1,1
-access_sistek_stock_map_user,sistek.stock.map user,model_sistek_stock_map,base.group_user,1,1,1,0
-access_sistek_link_wizard_user,sistek.link.wizard user,model_sistek_link_wizard,base.group_user,1,1,1,0
-access_api_inventory_snapshot_manager,api.inventory.snapshot manager,model_api_inventory_snapshot,base.group_system,1,1,1,1
-access_api_inventory_item_manager,api.inventory.item manager,model_api_inventory_item,base.group_system,1,1,1,1
