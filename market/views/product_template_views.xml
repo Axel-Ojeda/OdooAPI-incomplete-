@@ -1,0 +1,27 @@
+<odoo>
+  <record id="view_product_template_form_sistek_tab" model="ir.ui.view">
+    <field name="name">product.template.form.sistek.tab</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_form_view"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//sheet//notebook" position="inside">
+        <page string="Sistek">
+          <group>
+              <field name="x_sistek_sync_enabled"/>
+              <field name="x_sistek_item_code"/>
+              <field name="x_product_partnumber"/>
+          </group>
+
+          <!-- Texto informativo SIN label -->
+          <group>
+            <div class="o_form_label">
+              El stock se aplica desde el snapshot del API a la ubicación Sistek configurada.
+            </div>
+          </group>
+        </page>
+      </xpath>
+
+    </field>
+  </record>
+</odoo>
